@@ -1,0 +1,43 @@
+html,body,#root{
+  margin:0;
+  padding: 0;
+  height: 100%;
+  text-align: center;
+  font-style: italic;
+  color: darkcyan;
+  background-image: linear-gradient(45deg, lightblue, white);
+}
+
+a{
+  color: blue;
+}
+
+.Box{
+  display: inline-block;
+  text-align: left;
+  border: 3px dashed black;
+  padding: 0 10px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px;
+}
+
+.BoxSolid{
+  display: inline-block;
+  text-align: left;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px;
+}
+
+.Item{
+  display: inline-block;
+  text-align: center;
+  border: 3px dashed black;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 30px;
+  box-shadow: 5px 5px 10px;
+}

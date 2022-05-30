@@ -1,0 +1,31 @@
+.layout {
+	height: 100%;
+    box-sizing: border-box; /* fix css size bug/feature */
+    display: grid;
+    grid-template-rows: 15% 78% 7%;
+    grid-template-columns: repeat(6, 1fr); /* fr = fraction */
+    direction: rtl;
+}
+
+.layout>header, .layout>footer{
+    grid-column: span 6;
+}
+.layout>header{
+    grid-column: span 5;
+}
+.layout>main{
+    grid-column: span 5;
+}
+
+.layout,.layout>*{
+    border: 1px solid black;
+}
+body {
+    height: 100%;
+    overflow:scroll;
+    width: 100%;
+    margin:  auto;
+    padding: em;
+    font: 100%/1.2 serif;
+}
+
