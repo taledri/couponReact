@@ -30,7 +30,7 @@ function Login(): JSX.Element {
                     console.log(userInfo);
                     notify.success("* Admin login successful!");
                     history.push("/adminPage");
-                    
+                    window.location.reload();
 
                 }catch(err){
                     notify.error(" Login failed. You either typed wrong details, or this account does not exist.");
@@ -51,7 +51,7 @@ function Login(): JSX.Element {
                 console.log(userInfo);
                 notify.success("company login successful!");
                 history.push("/companyPage");
-             
+                window.location.reload();
 
             }catch(err){
                 notify.error(" Login failed. You either typed wrong details, or this account does not exist.");
@@ -70,6 +70,7 @@ function Login(): JSX.Element {
             console.log(userInfo);
             notify.success("* customer login successful!");
             history.push("/customerPage");
+            window.location.reload();
 
         }catch(err){
             notify.error("* Login failed. You either typed wrong details, or this account does not exist.");

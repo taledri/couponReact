@@ -9,9 +9,7 @@ import login from "../../login/login";
 
 
 class Menu extends Component{
-    state = {
-        tal: String
-      }
+   
    
     private adminMenu = ():JSX.Element =>{
         //localStorage.setItem("user","admin");
@@ -98,7 +96,7 @@ class Menu extends Component{
             <div className="Menu">
 
               <NavLink exact to="/login">Login/ </NavLink>
-              <NavLink exact to="/LogOut">LogOut</NavLink>
+              <NavLink exact to="/logOut">LogOut</NavLink>
               <br/>
               <NavLink exact to="/">Home</NavLink>
 

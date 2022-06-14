@@ -5,23 +5,30 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import Coupon from "../../model/coupon";
+import SingleCoupon from "../../model/singleCoupon";
+import globals from "../../Util/Globals";
 import notify from "../../Util/Notify";
 
-interface formable{
-    category:string;
-}
+
 function GetCustomerCouponByCategory(): JSX.Element {
-    const [category,setCategory] = useState("");
     const fieldDesign = {fontSize:40, margin:10};
-    const {register,handleSubmit,formState:{errors}} = useForm<formable>();
-    const send:SubmitHandler<formable> = async (data)=>{
-        console.log(data);
-        const url = "http://localhost:8080/customer/getCustomerCouponByCategory/"+data.category;
-        const response = await axios.get<formable>(url);
-        console.log(response);
+    const [cusCoup,setCusCoup] = useState<Coupon[]>([]);
+    const {register,handleSubmit,formState:{errors}} = useForm<Coupon>();
+    async function send(coupon:Coupon){
+       try{
+        const response = await axios.get(globals.customer.getCustomerCouponByCategory+coupon.category);
+        console.log(response.data);
+        setCusCoup(response.data);
+        console.log(coupon);
+        notify.success("There is a Coupon with that category");
+    } catch {
+        notify.error("coupons are empty")  
     }
+}
             return (
                 <div className="login BoxSolid">
+                    {cusCoup.map (item => <SingleCoupon key= {item.id} myCoupon={item}/>)}
+
                     <form onSubmit={handleSubmit(send)}>
                 <Typography variant="h4" className="HeadLine">Get Customer Coupon by category</Typography><hr/>
                 <ViewAgenda style={fieldDesign}/>

@@ -2,6 +2,10 @@ import { Typography, TextField, Checkbox, ButtonGroup, Button } from "@material-
 import { ContactMail, Password, VerifiedUserOutlined, ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Company from "../../../model/company";
+import Coupon from "../../../model/coupon";
+import globals from "../../../Util/Globals";
+import notify from "../../../Util/Notify";
 
 interface formable{
     email:string;
@@ -11,14 +15,20 @@ interface formable{
 }
 
 function UpdtaeCompany(): JSX.Element {
-    const fieldDesign = {fontSize:40, margin:10};
-    const {register,handleSubmit,formState:{errors}} = useForm<formable>();
-
-    const send:SubmitHandler<formable> = async (data)=>{
+     const fieldDesign = {fontSize:40, margin:10};
+     const {register,handleSubmit,formState:{errors}} = useForm<Company>();
+     const send:SubmitHandler<Company> = async (data)=>{
         console.log(data);
-        const url = "http://localhost:8080/admin/updateCompany";
-        const response = await axios.put<formable>(url,data);
+        try{
+            console.log("jjjj");
+        const response = await axios.put<Company>(globals.admin.updateCompany,data);
         console.log(response);
+        notify.success("company update");
+        }catch{
+            notify.error("failed")
+
+        }
+
     }
 
     return (
@@ -37,7 +47,7 @@ function UpdtaeCompany(): JSX.Element {
                 <TextField  label="name" variant="outlined" {...register("name",{required:true})}/>
                 <br/><br/>
                 <ViewAgenda style={fieldDesign}/>
-                <TextField type="number" variant="outlined" {...register("id",{min:1,required:true})}/>
+                <TextField type="number" label="companyId"  variant="outlined" {...register("id",{min:1,required:true})}/>
                 <br/>{errors.id && "You must give id company"}{errors.id&&"There is already a company with that id!"}
                 <Checkbox/>
                 <label>cancel</label>

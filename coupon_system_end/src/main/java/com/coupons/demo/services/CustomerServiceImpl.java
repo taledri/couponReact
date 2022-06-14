@@ -56,7 +56,7 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
      */
 
     public void purchaseCoupon(int id) throws CouponSystemException {
-        try {
+
             Coupon coupon;
             LocalDate localDate = LocalDate.now();
             if (couponRepo.existsById(id)) {
@@ -82,9 +82,7 @@ public class CustomerServiceImpl extends ClientService implements CustomerServic
             coupons.add(coupon);
             customer.setCoupons(coupons);
             customerRepo.saveAndFlush(customer);
-        } catch (Exception err) {
-            System.out.println("CustomerService.purchaseCoupon: " + err.getMessage());
-        }
+
     }
 
     /**

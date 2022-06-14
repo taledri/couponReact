@@ -8,14 +8,18 @@ import com.coupons.demo.exceptions.CustomerSystemException;
 import com.coupons.demo.repositories.CompanyRepo;
 import com.coupons.demo.repositories.CouponRepo;
 import com.coupons.demo.repositories.CustomerRepo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+//@JsonIgnoreProperties({"hibernateLazyInitializer"})
+
 public class AdminServiceImpl extends ClientService implements AdminService {
 
     private final CompanyRepo companyRepo;
@@ -23,26 +27,28 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     private final CustomerRepo customerRepo;
     private final Company company;
 
-    private final String adminEmail="admin@admin.com";
-    private final String adminPass="admin";
+    private final String adminEmail = "admin@admin.com";
+    private final String adminPass = "admin";
 
     /**
-     *Checks if credentials match admin login
-     * @param email user email
+     * Checks if credentials match admin login
+     *
+     * @param email    user email
      * @param password user password
      * @return if mach to admin
      */
     @Override
     public boolean login(String email, String password) {
-        if (email.equalsIgnoreCase(adminEmail) && password.equals(adminPass) ){
+        if (email.equalsIgnoreCase(adminEmail) && password.equals(adminPass)) {
             return true;
         }
         return false;
     }
 
     /**
-     *adds a company to the database
-     * @param company  to add
+     * adds a company to the database
+     *
+     * @param company to add
      * @throws CompanySystemException if company name or email already exists in database
      */
     @Override
@@ -58,7 +64,8 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     }
 
     /**
-     *updates a company in the database
+     * updates a company in the database
+     *
      * @param company to update.
      * @throws CompanySystemException if company already exits in the DB
      */
@@ -68,20 +75,26 @@ public class AdminServiceImpl extends ClientService implements AdminService {
             throw new CompanySystemException("There is no company with that ID!");
         }
 
-        Optional<Company> companyOptional= companyRepo.findByEmail(company.getEmail());
-        if (companyOptional.isPresent()){
-            if (companyOptional.get().getId() != company.getId()){
+
+        Optional<Company> companyOptional = companyRepo.findByEmail(company.getEmail());
+        if (companyOptional.isPresent()) {
+            if (companyOptional.get().getId() != company.getId()) {
                 throw new CompanySystemException("EMAIL_EXISTS");
+            }
+            if (!companyOptional.get().getName().equalsIgnoreCase(company.getName())) {
+                throw new CompanySystemException("name exists");
             }
         }
 
+        company.setCoupons(new ArrayList<>());
         companyRepo.saveAndFlush(company);
     }
 
     /**
-     *deletes a company from the database
+     * deletes a company from the database
+     *
      * @param companyId to delete
-     * @throws CompanySystemException  if the company was not found in the database
+     * @throws CompanySystemException if the company was not found in the database
      */
     @Override
     public void deleteCompany(int companyId) throws CompanySystemException {
@@ -91,10 +104,11 @@ public class AdminServiceImpl extends ClientService implements AdminService {
         }
         companyRepo.deleteById(companyId);
         couponRepo.deleteById(companyId);
-        }
+    }
 
     /**
-     *gets all the companies registered in the database
+     * gets all the companies registered in the database
+     *
      * @return all the companies in the database
      * @throws CompanySystemException if list is empty
      */
@@ -107,7 +121,8 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     }
 
     /**
-     *gets one company from the database.
+     * gets one company from the database.
+     *
      * @param companyId of the company
      * @return the company found
      * @throws CompanySystemException if company with given id wasnt found in teh database
@@ -124,6 +139,7 @@ public class AdminServiceImpl extends ClientService implements AdminService {
 
     /**
      * adds a customer to the database.
+     *
      * @param customer the customer to add.
      * @throws CustomerSystemException if customer email already exists in database.
      */
@@ -132,13 +148,18 @@ public class AdminServiceImpl extends ClientService implements AdminService {
         if (customerRepo.existsById(customer.getId())) {
             throw new CustomerSystemException("there is id exits");
         } else {
-            customerRepo.save(customer);
+            if (customerRepo.existsByEmail(customer.getEmail())) {
+                throw new CustomerSystemException("there is email exits");
+            } else {
+                customerRepo.save(customer);
+            }
         }
     }
 
     /**
-     *updates a customer in the database.
-     * @param customer  the customer to update.
+     * updates a customer in the database.
+     *
+     * @param customer the customer to update.
      * @throws CustomerSystemException if customer with given id does not exist in the database
      */
     @Override
@@ -151,20 +172,23 @@ public class AdminServiceImpl extends ClientService implements AdminService {
     }
 
     /**
-     *deletes a customer from the database
+     * deletes a customer from the database
+     *
      * @param customerId the customer to delete
      * @throws CustomerSystemException if the customer was not found in the database
      */
     @Override
     public void deleteCustomer(int customerId) throws CustomerSystemException {
-if (!customerRepo.existsById(customerId)){
-    throw new CustomerSystemException("customer not found");
-}customerRepo.deleteById(customerId);
-couponRepo.deleteById(customerId);
+        if (!customerRepo.existsById(customerId)) {
+            throw new CustomerSystemException("customer not found");
+        }
+        customerRepo.deleteById(customerId);
+        couponRepo.deleteById(customerId);
     }
 
     /**
-     *gets all the customers registered in the database
+     * gets all the customers registered in the database
+     *
      * @return all the customers in the database
      */
     @Override
@@ -173,14 +197,15 @@ couponRepo.deleteById(customerId);
     }
 
     /**
-     *gets one customer from the database
+     * gets one customer from the database
+     *
      * @param customerId id of the customer
      * @return the customer found
      * @throws CustomerSystemException f customer with given id was not found in teh database
      */
     @Override
     public Customer getOneCustomer(int customerId) throws CustomerSystemException {
-        if (!customerRepo.existsById(customerId)){
+        if (!customerRepo.existsById(customerId)) {
             throw new CustomerSystemException("customer not found");
         }
         return customerRepo.findById(customerId).get();

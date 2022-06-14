@@ -45,17 +45,21 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
     /**
      *adds a coupon to the database.
      * @param coupon  the coupon to add.
-     * @throws CouponSystemException if coupon exits in the DB
+     * @throws CompanySystemException if coupon exits in the DB
      */
     @Override
-    public void addCoupon(Coupon coupon) throws CouponSystemException {
-        try {
-        if ((couponRepo.findByTitleAndCompanyId(coupon.getTitle(), coupon.getCompanyId()) == null &&
-                (!couponRepo.existsById(coupon.getId()))))
+    public void addCoupon(Coupon coupon) throws  CompanySystemException {
+
+        if (!(couponRepo.findByTitleAndCompanyId(coupon.getTitle(), coupon.getCompanyId()) == null)) {
+            throw new CompanySystemException("the company has this coupon");
+        } else {
+            if (couponRepo.existsById(coupon.getId())) {
+                throw new CompanySystemException("exits");
+            }
             couponRepo.save(coupon);
-        }catch (Exception err){
-        throw new CouponSystemException("exits");
-    }}
+
+        }
+    }
 
     /**
      *updates a coupon in the database.
@@ -64,14 +68,14 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
      */
     @Override
     public void updateCoupon(Coupon coupon) throws CompanySystemException {
-      try {
-          if (!couponRepo.existsById(coupon.getId()) || (company.getId() != couponRepo.getById(coupon.getId()).getCompanyId())) {
+
+          //if (!couponRepo.existsById(coupon.getId()) || (company.getId() != couponRepo.getById(coupon.getId()).getCompanyId())) {
+            if(couponRepo.getById(coupon.getId()).getCompanyId()!=coupon.getCompanyId()){
               throw new CompanySystemException("Coupon ID not found");
           }
         couponRepo.saveAndFlush(coupon);
-      } catch (Exception err) {
-          System.out.println(err.getMessage());
-    }}
+
+    }
 
     /**
      *deletes a coupon from the database.
@@ -107,12 +111,12 @@ public class CompanyServiceImpl extends ClientService implements CompanyService 
 
     /**
      *gets all coupons up to price
-     * @param maxPrice max price wanted
+     * @param price max price wanted
      * @return list coupons
      */
     @Override
-    public List<Coupon> getAllCouponsByPrice(double maxPrice) {
-        return couponRepo.findAllCouponsByCompanyIdAndPriceLessThanEqual(company.getId(),maxPrice);
+    public List<Coupon> getAllCouponsByPrice(double price) {
+        return couponRepo.findAllCouponsByCompanyIdAndPriceLessThanEqual(company.getId(),price);
     }
 
     /**

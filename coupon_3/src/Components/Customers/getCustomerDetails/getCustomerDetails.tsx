@@ -3,6 +3,7 @@ import { ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { Component } from "react";
 import customer from "../../model/customer";
+import globals from "../../Util/Globals";
 {/*}
 function GetCustomerDetails(): JSX.Element {
     const fieldDesign = {fontSize:40, margin:10};
@@ -50,7 +51,7 @@ class GetCustomerDetails extends Component<{}, GetCustomerDetailsState> {
     }
 
     public async componentDidMount(){
-        const result = await axios.get("http://localhost:8080/customer/getCustomerDetails");
+        const result = await axios.get(globals.customer.getCustomerDetails);
         const CustomerData = result.data;
         console.log(CustomerData);
         this.setState({

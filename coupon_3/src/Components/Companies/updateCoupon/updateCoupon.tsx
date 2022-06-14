@@ -2,6 +2,9 @@ import { Typography, TextField, Checkbox, ButtonGroup, Button } from "@material-
 import { ContactMail, Password, VerifiedUserOutlined, ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Coupon from "../../model/coupon";
+import globals from "../../Util/Globals";
+import notify from "../../Util/Notify";
 
 interface formable{
     amount: number;
@@ -19,12 +22,17 @@ interface formable{
 function UpdtaeCoupon(): JSX.Element {
     const fieldDesign = {fontSize:40, margin:10};
     const {register,handleSubmit,formState:{errors}} = useForm<formable>();
-
     const send:SubmitHandler<formable> = async (data)=>{
         console.log(data);
-        const url = "http://localhost:8080/company/updateCoupon";
-        const response = await axios.put<formable>(url,data);
+        try{
+        const response = await axios.put<formable>(globals.company.updateCoupon,data);
         console.log(response);
+        notify.success("coupon update");
+        }catch{
+            notify.error("unsuccessfully");
+
+        }
+
     }
 
      return (
@@ -32,8 +40,12 @@ function UpdtaeCoupon(): JSX.Element {
             <form onSubmit={handleSubmit(send)}>
             <Typography variant="h4" className="HeadLine">Updtae Coupon</Typography><hr/>
             <ContactMail style={fieldDesign}/>
+            <ViewAgenda style={fieldDesign}/>
+                <TextField type="number" label="id " variant="outlined" {...register("id",{min:1,required:true})}/>
+                <ViewAgenda style={fieldDesign}/>
+                <TextField type="number" label="companyId " variant="outlined" {...register("companyId",{min:1,required:true})}/><br/>
                 <TextField type="string"label="category" variant="outlined" {...register("category",{required:true})}/>
-                <div >{errors.category && "You must give coupon category"}</div>
+                {errors.category && "You must give coupon category"}
                 <Password style={fieldDesign}/>
                 <TextField  type="string" label="description" variant="outlined" {...register("description",{required:true})}/>
                 <br/>
@@ -51,10 +63,10 @@ function UpdtaeCoupon(): JSX.Element {
                 <br/>
                 <ViewAgenda style={fieldDesign}/>
                 <TextField type="string" label="image " variant="outlined" {...register("image",{required:true})}/><br/>
-
+                <ViewAgenda style={fieldDesign}/>
+                <TextField type="string" label="title " variant="outlined" {...register("title",{required:true})}/><br/>
                 <Checkbox/>
                 <label>cancel</label>
-                <br/>
                 <button>update</button>
             </form>
 

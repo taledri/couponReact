@@ -49,34 +49,47 @@ public class CustomerTest implements CommandLineRunner {
                 .image("beautifulWorld.img")
                 .category(Category.VACATION)
                 .build();
+        try {
         companyService.addCoupon(coupon);
 
         System.out.println("======PURCHASE COUPON SUCCESSFULLY===");
         customerService.purchaseCoupon(coupon.getId());
-        String addURL = "http://localhost:8080/customer/purchaseCoupon";
-        restTemplate.postForEntity(addURL, coupon.getId(), Coupon.class);
+        Map<String, Integer> param3 = new HashMap<>();
+        String addURL = "http://localhost:8080/customer/purchaseCoupon/{id}";
+        param3.put("id",coupon.getId());
+
+            restTemplate.postForEntity(addURL, coupon.getId(), Coupon.class, param3);
+        }catch (Exception err) {
+             System.out.println(err.getMessage());}
+
 
         System.out.println("====GET ALL CUSTOMER COUPONS BY CATEGORY===");
         Map<String, Category> param1 = new HashMap<>();
+        try {
         customerService.getCustomerCouponByCategory(coupon.getCategory());
         String customerCouponCategory = "http://localhost:8080/customer/getCustomerCouponByCategory/{category}";
         param1.put("category",coupon.getCategory());
-        //try {
+
         ResponseEntity<Coupon[]>customerCouponCategoryJason=restTemplate.getForEntity(customerCouponCategory, Coupon[].class, param1);
         List<Coupon> getCustomerCouponByCategory= Arrays.asList(customerCouponCategoryJason.getBody());
         TablePrinter.print(getCustomerCouponByCategory);
-      //  }catch (Exception err) {
-           // System.out.println(err.getMessage());
-       // }
+       }catch (Exception err) {
+            System.out.println(err.getMessage());
+        }
 
         System.out.println("===GET ALL COUPONS CUSTOMER BUY UP TO SOME PRICE=== ");
         Map<String, Double> param = new HashMap<>();
-        customerService.getCustomerCouponByMaxPrice(coupon.getPrice());
-        String customerCouponMaxPrice="http://localhost:8080/customer/getCustomerCouponByMaxPrice/{price}";
-        param.put("price",coupon.getPrice());
-        ResponseEntity<Coupon[]>customerCouponMAXpRICEJason=restTemplate.getForEntity(customerCouponMaxPrice,Coupon[].class,param);
-        List<Coupon> getCustomerCouponByMaxPrice= Arrays.asList(customerCouponMAXpRICEJason.getBody());
-        TablePrinter.print(getCustomerCouponByMaxPrice);
+        try {
+            customerService.getCustomerCouponByMaxPrice(coupon.getPrice());
+            String customerCouponMaxPrice = "http://localhost:8080/customer/getCustomerCouponByMaxPrice/{price}";
+            param.put("price", coupon.getPrice());
+            ResponseEntity<Coupon[]> customerCouponMAXpRICEJason = restTemplate.getForEntity(customerCouponMaxPrice, Coupon[].class, param);
+            List<Coupon> getCustomerCouponByMaxPrice = Arrays.asList(customerCouponMAXpRICEJason.getBody());
+            TablePrinter.print(getCustomerCouponByMaxPrice);
+        } catch (Exception err) {
+            System.out.println(err.getMessage());
+        }
+
 
         System.out.println("==GET ALL CUSTOMER DETAILS==");
         System.out.println(customerService.getCustomerDetails());

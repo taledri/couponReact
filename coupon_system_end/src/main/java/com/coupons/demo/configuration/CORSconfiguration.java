@@ -23,6 +23,7 @@ public class CORSconfiguration {
         //allow to get any header
         config.addAllowedHeader("*");
         config.addExposedHeader("*");
+        config.addExposedHeader("Authorization");
         //tell which VERB is allowed
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");

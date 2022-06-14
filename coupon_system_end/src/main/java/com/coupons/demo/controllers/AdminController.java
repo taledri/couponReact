@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080","http:localhost:3000"}, allowedHeaders = "*")
+@CrossOrigin(origins = {"http://localhost:8080","http://localhost:3000"}, allowedHeaders = "*")
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 
@@ -25,7 +25,7 @@ public class AdminController {
 
 
     @PostMapping("/adminLogin")
-    public ResponseEntity<?> adminLogin(@RequestBody UserDetail userData) throws CustomerSystemException  {
+    public ResponseEntity<?> adminLogin(@RequestBody UserDetail userData) throws CustomerSystemException {
         if (adminService.login(userData.getEmail(), userData.getPassword())) {
             String myToken = jwTutil.generateToken(new UserDetail(userData.getEmail(), 0, ClientType.admin));
             return new ResponseEntity<>(myToken, HttpStatus.ACCEPTED);
@@ -35,9 +35,10 @@ public class AdminController {
 
     /**
      * adds a company to the database.
+     *
      * @param company is add
      * @return response entity with http status
-     * @throws CompanySystemException  if company exists in the database.
+     * @throws CompanySystemException if company exists in the database.
      */
     @PostMapping("/addCompany")
     public ResponseEntity<?> addCompany(@RequestBody Company company) throws CompanySystemException {
@@ -51,17 +52,28 @@ public class AdminController {
      * @throws CompanySystemException if company not exists in the database
      */
     @PutMapping("/updateCompany")
-    public ResponseEntity<?> updateCompany(@RequestHeader(name = "Authorization") String token, @RequestBody Company company) throws CompanySystemException {
-        if (jwTutil.validateToken(token)) {
+    public void updateCompany( @RequestBody Company company) throws CompanySystemException {
+        try {
             adminService.updateCompany(company);
-            return ResponseEntity.ok()
-                    .header("Authorization", jwTutil.generateToken(new UserDetail(
-                            jwTutil.extractEmail(token),
-                            ClientType.admin)))
-                    .body(null);
+
+
+        } catch (CompanySystemException e) {
+            throw new CompanySystemException(" company is not in the system");
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+
+
+    {/* @PutMapping("updateCompany") //http://localhost:8080/coupons/updateCompany/
+    public ResponseEntity<?> updateCompany( @RequestBody Company company) throws CompanySystemException {
+        try {
+            adminService.updateCompany(company);
+        }catch (CompanySystemException e){
+            throw new CompanySystemException("company is not in the system");
+    }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+    }
+    */}
 
         /**
          * delete a company to the database.
@@ -130,9 +142,12 @@ public class AdminController {
      */
     @DeleteMapping("/deleteCustomer/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable int id) throws CustomerSystemException {
+        try {
         adminService.deleteCustomer(id);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
+    }  catch (CustomerSystemException e) {
+        throw new CustomerSystemException(" Customer is not deleted");
+    }}
 
     /**
      * retrieves all customers from teh database.

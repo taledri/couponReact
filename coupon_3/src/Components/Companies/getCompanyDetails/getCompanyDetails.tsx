@@ -3,6 +3,7 @@ import { ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { Component, useState } from "react";
 import Company from "../../model/company";
+import globals from "../../Util/Globals";
 
 interface GetCompanyDetailsState {
     myCompany:Company;
@@ -17,7 +18,7 @@ class GetCompanyDetails extends Component<{}, GetCompanyDetailsState> {
         
     }
     public async componentDidMount(){
-        const result = await axios.get("http://localhost:8080/company/getCompanyDetails");
+        const result = await axios.get(globals.company.getCompanyDetails);
         const CompanyData = result.data;
         console.log(CompanyData);
         this.setState({

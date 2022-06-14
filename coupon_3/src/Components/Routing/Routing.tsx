@@ -27,7 +27,8 @@ import adminPage from "../admin/adminPage/adminPage";
 import companyPage from "../Companies/companyPage/companyPage";
 import customerPage from "../Customers/customperPage/customerPage";
 import Page404 from "./Page404/Page404";
-import AdminMenu from "../mainarea/Aside/AsideMenu";
+import logout from "../layout/logout/logout";
+
 
 
 
@@ -37,6 +38,7 @@ function Routing(): JSX.Element {
             <Switch>
                 <Route path="/" component={Main} exact/>
                 <Route path="/login" component={login} exact/>
+                <Route path="/logout" component={logout} exact/>
                 <Route path="/home" component={Main} exact/>
                 <Route path="/addCompany" component={addCompany} exact/>
                 <Route path="/updateCompany" component={updateCompany} exact/>

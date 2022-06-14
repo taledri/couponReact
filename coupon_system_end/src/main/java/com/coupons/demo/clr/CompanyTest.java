@@ -34,32 +34,40 @@ public class CompanyTest implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Map<String, String> params = new HashMap<>();
+        System.out.println("------------ company login ----------");
+        System.out.println("$$$$$$$$$$$$ company login successfully$$$$$$$");
+        System.out.println("------------ company login ----------");
+
+
 
         CompanyService companyService = (CompanyService) loginManager.login(LoginManager.ClientType.COMPANY, "tal@gmail.com", "Pt123456");
 
         System.out.println("======ADD NEW COUPON======");
-
         Coupon coupon = Coupon.builder()
                 .companyId(3)
-                .title("spa")
+                .title("spa8")
                 .description("choosing a massage from the list")
                 .startDate(Date.valueOf("2022-06-01"))
                 .endDate(Date.valueOf("2022-08-29"))
                 .amount(50)
                 .price(159.99)
-                .image("beautifulWorld.img")
+                .image("tal")
                 .category(Category.VACATION)
                 .build();
+
         companyService.addCoupon(coupon);
 
         System.out.println(coupon);
         String addURL = "http://localhost:8080/company/addCoupon";
-        restTemplate.postForEntity(addURL, coupon, Coupon.class);
-
+        try{
+            restTemplate.postForEntity(addURL, coupon, Coupon.class);
+        }catch (Exception err) {
+                System.out.println(err.getMessage());
+            }
         System.out.println("==============update coupon=============");
 
-        Coupon anyCoupon = couponRepo.getById(4);
-        anyCoupon.setAmount(4);
+        Coupon anyCoupon = couponRepo.getById(6);
+        anyCoupon.setAmount(8);
         anyCoupon.setDescription(" buy a weekend you get a free massage package");
         anyCoupon.setStartDate(Date.valueOf("2022-05-05"));
         anyCoupon.setEndDate(Date.valueOf("2023-08-05"));
@@ -67,7 +75,7 @@ public class CompanyTest implements CommandLineRunner {
         anyCoupon.setCategory(Category.VACATION);
         anyCoupon.setPrice(151.00);
         anyCoupon.setTitle("extra day");
-        System.out.println(companyService.getCompanyDetails());
+        System.out.println(coupon);
         companyService.updateCoupon(anyCoupon);
         String addURLUpdateCoupon = "http://localhost:8080/company/updateCoupon";
         try {
@@ -85,20 +93,21 @@ public class CompanyTest implements CommandLineRunner {
         TablePrinter.print(getAllCoupons);
 
         System.out.println("=========GET ALL COMPANY COUPONS BY CATEGORY==========");
+        Map<String, Category> param = new HashMap<>();
         System.out.println(companyService.getAllCouponsByCategory(Category.VACATION));
         String AllCouponsByCategory = "http://localhost:8080/company/getAllCouponsByCategory/{category}";
-        params.put("category", "VACATION");
-        ResponseEntity<Coupon[]> companyJason = restTemplate.getForEntity(AllCouponsByCategory, Coupon[].class,params);
+        param.put("category", coupon.getCategory());
+        ResponseEntity<Coupon[]> companyJason = restTemplate.getForEntity(AllCouponsByCategory, Coupon[].class,param);
         List<Coupon> getAllCouponsByCategory = Arrays.asList(companyJason.getBody());
         TablePrinter.print(getAllCouponsByCategory);
 
         System.out.println("=========GET ALL COMPANY COUPONS MAX PRICE==========");
-        params = new HashMap<>();
+        Map<String, Double> param2 = new HashMap<>();
         System.out.println(companyService.getAllCouponsByPrice(200));
         String AllCouponsByPrice = "http://localhost:8080/company/getAllCouponsByPrice/{maxPrice}";
-        params.put("maxPrice", "200");
+        param2.put("maxPrice", coupon.getPrice());
         try {
-       restTemplate.getForEntity(AllCouponsByPrice, Coupon[].class, params);
+       restTemplate.getForEntity(AllCouponsByPrice, Coupon[].class, param2);
         }catch (Exception err) {
             System.out.println(err.getMessage());
         }
@@ -109,10 +118,10 @@ public class CompanyTest implements CommandLineRunner {
 
         System.out.println("============DELETE COUPON=============");
         params = new HashMap<>();
-        companyService.deleteCoupon(3);
+        companyService.deleteCoupon(6);
         System.out.println("Company Coupons after delete:\n" + companyService.getAllCoupons());
         String deleteCoupon="http://localhost:8080/company/deleteCoupon/{id}";
-        params.put("id","1");
+        params.put("id","6");
         try {
             restTemplate.delete(deleteCoupon, params);
         }catch (Exception err) {

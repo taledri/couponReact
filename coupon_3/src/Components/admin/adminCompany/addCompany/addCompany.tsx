@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
+import globals from "../../../Util/Globals";
 import notify from "../../../Util/Notify";
 
 interface formable{
@@ -19,11 +20,10 @@ function AddCompany(): JSX.Element {
     const history = useHistory();
     const send:SubmitHandler<formable> = async (data)=>{
         console.log(data);
-        const url = "http://localhost:8080/admin/addCompany";
-        const response = await axios.post<formable>(url,data);
+        const response = await axios.post<formable>(globals.admin.addCompany,data);
         console.log(response);
         notify.success("company add");
-        history.push("/getAllCompanies")
+        
     }
         return (
             <div className="login BoxSolid">

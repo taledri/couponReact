@@ -19,15 +19,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Date;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Order(1)
 @Data
 @RequiredArgsConstructor
+
 public class AdminTest implements CommandLineRunner {
     private final AdminService adminService;
     private final CouponRepo couponRepo;
@@ -39,6 +37,7 @@ public class AdminTest implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Map<String, String> params = new HashMap<>();
+        List<Coupon>couponList=new ArrayList<>();
 
         System.out.println("======== admin login successfully======");
         AdminService adminService = (AdminService) loginManager.login(LoginManager.ClientType.ADMINISTRATOR, "admin@admin.com", "admin");
@@ -70,7 +69,7 @@ public class AdminTest implements CommandLineRunner {
         couponRepo.save(upgrade);
 
         Coupon addDay = Coupon.builder()
-                .companyId(3)
+                .companyId(5)
                 .title("extra day")
                 .price(599)
                 .image("url")
@@ -84,7 +83,7 @@ public class AdminTest implements CommandLineRunner {
 
 
         Coupon tenPercent = Coupon.builder()
-                .companyId(4)
+                .companyId(5)
                 .title("discount 10 percent")
                 .price(40)
                 .image("url")
@@ -109,6 +108,9 @@ public class AdminTest implements CommandLineRunner {
                 .description("get 1 box chocolate cookies")
                 .build();
         couponRepo.save(chocolate);
+        //couponList.add(chocolate);
+        //couponList.add(tenPercent);
+
 
 
         System.out.println("======ADD COMPANY SUCCESSFULLY=====");
@@ -116,10 +118,12 @@ public class AdminTest implements CommandLineRunner {
                 .name("SweeTALents")
                 .email("sweetalent@gmaill.com")
                 .password("Ss123456")
+                //.coupons(couponList)
                 .build();
-        adminService.addCompany(cookiesCompany);
+        System.out.println(cookiesCompany);
         String addURL = "http://localhost:8080/admin/addCompany";
         try {
+            adminService.addCompany(cookiesCompany);
             restTemplate.postForEntity(addURL, cookiesCompany, Company.class);
         } catch (Exception err) {
             System.out.println(err.getMessage());
@@ -179,9 +183,11 @@ public class AdminTest implements CommandLineRunner {
         System.out.println(" this is a demonstration of an admin updating a company's email and password - successfully");
         System.out.println("before changes:\n" + company);
         company.setEmail("test@walla.com");
-        company.setPassword("test new password");
-        String addURLUpdateCompany = "http://localhost:8080/admin/updateCompany";
+        company.setPassword("22222");
         try {
+        adminService.updateCompany(company);
+        String addURLUpdateCompany = "http://localhost:8080/admin/updateCompany";
+
             restTemplate.put(addURLUpdateCompany, company);
         } catch (Exception err) {
             System.out.println(err.getMessage());
@@ -191,9 +197,9 @@ public class AdminTest implements CommandLineRunner {
 
         System.out.println("======delete company======");
         params = new HashMap<>();
-        adminService.deleteCompany(1);
+        adminService.deleteCompany(2);
         String deleteCompany = "http://localhost:8080/admin/deleteCompany/{id}";
-        params.put("id", "1");
+        params.put("id", "4");
         try {
             restTemplate.delete(deleteCompany, params);
         } catch (Exception err) {
@@ -222,17 +228,18 @@ public class AdminTest implements CommandLineRunner {
 
 
         System.out.println("=======ADD NEW CUSTOMERS======");
-
+        String addURLCustomer = "http://localhost:8080/admin/addCustomer";
         Customer Zeev = Customer.builder()
                 .firstName("Zeev")
                 .lastName("Mindali")
                 .email("zeev@walla.com")
                 .password("Zz1234")
                 .build();
+        try {
         adminService.addCustomer(Zeev);
         System.out.println(Zeev + "was added !");
-        String addURLCustomer = "http://localhost:8080/admin/addCustomer";
-        try {
+
+
             restTemplate.postForEntity(addURLCustomer, Zeev, Customer.class);
         } catch (Exception err) {
             System.out.println(err.getMessage());
@@ -244,10 +251,25 @@ public class AdminTest implements CommandLineRunner {
                 .email("tal@gmail.com")
                 .password("Tt1234")
                 .build();
+        try {
         adminService.addCustomer(tal);
         System.out.println(tal + "was added !");
-        try {
+
             restTemplate.postForEntity(addURLCustomer, tal, Customer.class);
+        } catch (Exception err) {
+            System.out.println(err.getMessage());
+        }
+        Customer maor = Customer.builder()
+                .firstName("Maor")
+                .lastName("Cohen")
+                .email("maor@gmail.com")
+                .password("234")
+                .build();
+        try {
+            adminService.addCustomer(maor);
+            System.out.println(maor + "was added !");
+
+            restTemplate.postForEntity(addURLCustomer, maor, Customer.class);
         } catch (Exception err) {
             System.out.println(err.getMessage());
         }
@@ -259,9 +281,10 @@ public class AdminTest implements CommandLineRunner {
                 .email("mina@walla.com")
                 .password("Mm1234")
                 .build();
+        try {
         adminService.addCustomer(mina);
         System.out.println(mina + "was added !");
-        try {
+
             restTemplate.postForEntity(addURLCustomer, mina, Customer.class);
         } catch (Exception err) {
             System.out.println(err.getMessage());
@@ -291,7 +314,7 @@ public class AdminTest implements CommandLineRunner {
         }
         System.out.println("Customer deleted successfully ");
         String deleteCustomer = "http://localhost:8080/admin/deleteCustomer/{id}";
-        params.put("id", "2");
+        params.put("id", "3");
         restTemplate.delete(deleteCustomer, params);
         System.out.println("deleted");
 
@@ -310,7 +333,7 @@ public class AdminTest implements CommandLineRunner {
             System.out.println(err.getMessage());
         }
         String singleCustomer = "http://localhost:8080/admin/getOneCustomer/{id}";
-        params.put("id", "1");
+        params.put("id", "2");
         try {
             restTemplate.getForObject(singleCustomer, Customer.class, params);
         } catch (Exception err){

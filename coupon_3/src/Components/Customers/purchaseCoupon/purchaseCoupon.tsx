@@ -1,45 +1,41 @@
+import { Card, CardActionArea, CardMedia, CardContent, Typography, CardActions, Button } from "@material-ui/core";
 import axios from "axios";
+import { Component } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 
 import Coupon from "../../model/coupon";
+import globals from "../../Util/Globals";
 import notify from "../../Util/Notify";
-{/*function CouponPurchase(): JSX.Element {
-    const fieldDesign = {fontSize:40, margin:10};
-    const {register,handleSubmit,formState:{errors}} = useForm<Coupon>();
-    const send:SubmitHandler<Coupon> = async (data)=>{
-        console.log(data);
-        const url = "http://localhost:8080/customer/purchaseCoupon";
-        const response = await axios.post<Coupon>(url,data);
-        console.log(response);
-    
-    }*/}
+
     function CouponPurchase(): JSX.Element {
         const {register, handleSubmit, formState:{errors}} = useForm<Coupon>();
         //for sending the browser to specific location 
-        const history = useHistory();
+        //const history = useHistory();
     
         async function send(coupon:Coupon){
-            await axios.post<Coupon>("http://localhost:8080/customer/purchaseCoupon"+coupon.id)
+            try{
+                console.log("url", globals.customer.purchaseCoupon);
+                console.log("coupon id", coupon.id)
+               await axios.post<Coupon>(globals.customer.purchaseCoupon+coupon.id
+             /* {   {data: {
+                    id: coupon.id
+                }
+                }
+            }*/
+                )
                 .then(response => {
                     console.log(response.data)
                     notify.success("* Coupon successfully purchased!")
                 })
-                .catch(error => {
-                    console.log(error.response.data.message);
-                   notify.error(error.response.data.message);
-                })
-            // try{
-            //     const response = await AxiosRequest.post<CouponData>("coupons/purchaseCoupon/"+coupon.id);
-            //     console.log(response.data);
-            //     notify.success("The coupon was successfully purchased!");
-    
-            // } catch {
-            //     notify.error("The coupon was NOT purchased.");
-            // }
-        }
-    
-
+                
+            }catch{
+                //console.log(reponse.data)
+                   notify.error("unsuccessfully");
+                }
+            }
+        
+           
 
     
     return (
@@ -56,6 +52,7 @@ import notify from "../../Util/Notify";
         </div>    
     );
     }
+
 
 
 

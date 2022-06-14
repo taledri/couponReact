@@ -20,7 +20,7 @@ public class Customer {
     private String email;
     private String password;
     @Singular
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Coupon> coupons;
 
     /**

@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost:8080","http:localhost:3000"}, allowedHeaders = "*")
+@CrossOrigin(origins = {"http://localhost:8080","http://localhost:3000"}, allowedHeaders = "*")
 @RestController
 @RequestMapping("/company")
 @RequiredArgsConstructor
@@ -42,7 +42,7 @@ public class CompanyController {
      * @throws CouponSystemException if coupon exists in the database.
      */
     @PostMapping("/addCoupon")
-    public ResponseEntity<?> addCoupon(@RequestBody Coupon coupon) throws CouponSystemException {
+    public ResponseEntity<?> addCoupon(@RequestBody Coupon coupon) throws CouponSystemException, CompanySystemException {
         companyService.addCoupon(coupon);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

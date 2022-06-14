@@ -14,5 +14,7 @@ public interface CustomerRepo extends JpaRepository<Customer,Integer> {
      * @return a customer with these credentials exists, for login purposes
      */
     Customer findByEmailAndPassword(String email, String password);
+    boolean existsByEmail(String email);
+
 
 }

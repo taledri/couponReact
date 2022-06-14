@@ -2,6 +2,8 @@ import { Typography, TextField, Checkbox, ButtonGroup, Button } from "@material-
 import { ContactMail, Password, VerifiedUserOutlined, ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
+import globals from "../../../Util/Globals";
+import notify from "../../../Util/Notify";
 
 interface formable{
     email:string;
@@ -16,9 +18,14 @@ function AddCustomer(): JSX.Element {
     const {register,handleSubmit,formState:{errors}} = useForm<formable>();
     const send:SubmitHandler<formable> = async (data)=>{
         console.log(data);
-        const url = "http://localhost:8080/admin/addCustomer";
-        const response = await axios.post<formable>(url,data);
+        try{
+        const response = await axios.post<formable>(globals.admin.addCustomer,data);
         console.log(response);
+        notify.success("customer add")
+    } catch {
+        notify.error("customer email exits")
+    }
+
     }
 
       return (

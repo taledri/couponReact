@@ -2,6 +2,8 @@ import { Typography, TextField, Checkbox, ButtonGroup, Button } from "@material-
 import { ContactMail, Password, VerifiedUserOutlined, ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
+import globals from "../../Util/Globals";
+import notify from "../../Util/Notify";
 
 interface formable{
     amount: number;
@@ -22,9 +24,9 @@ function AddCoupon(): JSX.Element {
 
     const send:SubmitHandler<formable> = async (data)=>{
         console.log(data);
-        const url = "http://localhost:8080/company/addCoupon";
-        const response = await axios.post<formable>(url,data);
+        const response = await axios.post<formable>(globals.company.addCoupon,data);
         console.log(response);
+        notify.success("coupon add")
     }
         return (
             <div className="login BoxSolid">
@@ -37,9 +39,9 @@ function AddCoupon(): JSX.Element {
                 <TextField  type="string" label="description" variant="outlined" {...register("description",{required:true})}/>
                 <br/>
                 <VerifiedUserOutlined style={fieldDesign}/>
-                <TextField type="string" label="end Date" variant="outlined" {...register("endDate",{required:true})}/>
+                <TextField type="string" label="##-##-#### end Date " variant="outlined" {...register("endDate",{required:true})}/>
                 <VerifiedUserOutlined style={fieldDesign}/>
-                <TextField type="string" label="start Date" variant="outlined" {...register("startDate",{required:true})}/>
+                <TextField type="string" label="##-##-#### start Date" variant="outlined" {...register("startDate",{required:true})}/>
                 <br/>
                 <VerifiedUserOutlined style={fieldDesign}/>
                 <TextField type="string" label="image " variant="outlined" {...register("image",{required:true})}/>

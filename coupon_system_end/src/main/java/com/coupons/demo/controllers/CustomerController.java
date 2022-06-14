@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost:8080","http:localhost:3000"}, allowedHeaders = "*")
+@CrossOrigin(origins = {"http://localhost:8080","http://localhost:3000"}, allowedHeaders = "*")
 @RestController
 @RequestMapping("/customer")
 @RequiredArgsConstructor
@@ -39,10 +39,10 @@ public class CustomerController {
      * @return response entity with http status
      * @throws CouponSystemException
      */
-    @PostMapping("/purchaseCoupon")
-    public ResponseEntity<?> purchaseCoupon(@RequestBody int id) throws CouponSystemException {
+    @PostMapping ("/purchaseCoupon/{id}")
+    public ResponseEntity<?> purchaseCoupon(@PathVariable int id) throws CouponSystemException {
             customerService.purchaseCoupon(id);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
     /**

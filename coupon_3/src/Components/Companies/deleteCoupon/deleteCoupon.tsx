@@ -2,6 +2,8 @@ import { Button, ButtonGroup, Checkbox, TextField, Typography } from "@material-
 import { ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
+import globals from "../../Util/Globals";
+import notify from "../../Util/Notify";
 
 interface formable{
     id: number;
@@ -13,9 +15,13 @@ function DeleteCoupon(): JSX.Element {
     const {register,handleSubmit,formState:{errors}} = useForm<formable>();
     const send:SubmitHandler<formable> = async (data)=>{
         console.log(data);
-        const url = "http://localhost:8080/company/deleteCoupon/"+data.id;
-        const response = await axios.delete<formable>(url);
+        try{
+        const response = await axios.delete<formable>(globals.company.deleteCoupon+data.id);
         console.log(response);
+        notify.success("coupon deleted")
+    } catch {
+        notify.error("coupon not found")
+    }
     }
 
     return (

@@ -1,9 +1,11 @@
 import { Button, ButtonGroup, TextField, Typography } from "@material-ui/core";
 import { ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
-import { Component } from "react";
+import { Component, SyntheticEvent, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Company from "../../../model/company";
+import globals from "../../../Util/Globals";
+import notify from "../../../Util/Notify";
 
 interface formable{
     id:number;
@@ -15,13 +17,23 @@ interface CompanyState {
 
 function GetOneCompany(): JSX.Element {
     const fieldDesign = {fontSize:40, margin:10};
-    const {register,handleSubmit,formState:{errors}} = useForm<formable>();
-    const send:SubmitHandler<formable> = async (data)=>{
+    const [company,setCompany] = useState<Company>(new Company());
+    const [companyId,setCompanyId] = useState(0);
+    const {register,handleSubmit,formState:{errors}} = useForm<Company>();
+    const send:SubmitHandler<Company> = async (data)=>{
         console.log(data);
-        const url = "http://localhost:8080/admin/getOneCompany/"+data.id;
-        const response = await axios.get<formable>(url);
-        console.log(response);
+        const response = await axios.get<Company>(globals.admin.getOneCompany+data.id);
+        console.log(response.data);
+        setCompany(response.data);
+        console.log(company);
+        notify.success("There is a company with that id");
+
         
+    }
+    const companyUpdate = (args:SyntheticEvent)=>{
+        let custId =Number( (args.target as HTMLInputElement).value);
+        setCompanyId(custId);
+        console.log("and the winner is:",companyId);
     }
     
 
@@ -34,6 +46,13 @@ function GetOneCompany(): JSX.Element {
                 <br/>{errors.id && "You must give id company"}
                 <button >get</button>  
                 </form>
+                <div className="BoxSolid">
+                {company?.id>0 && company?.email}<br/>
+                {company?.id>0 && company?.id}<br/>
+                {company?.id>0 && company?.name}<br/>
+                {company?.id>0 && company?.coupons}<br/>
+
+        </div>
             </div>
         );
     }

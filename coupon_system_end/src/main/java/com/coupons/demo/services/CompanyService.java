@@ -26,7 +26,7 @@ public interface CompanyService {
       * @param coupon  the coupon to add.
      * @throws CouponSystemException if coupon exits in the DB
      */
-    void addCoupon(Coupon coupon) throws CouponSystemException;
+    void addCoupon(Coupon coupon) throws CouponSystemException, CompanySystemException;
 
     /**
      *updates a coupon in the database.
