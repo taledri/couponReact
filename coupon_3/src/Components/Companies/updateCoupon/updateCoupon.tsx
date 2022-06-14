@@ -62,9 +62,11 @@ function UpdtaeCoupon(): JSX.Element {
                 {errors.id && "You must give coupon amount"}
                 <br/>
                 <ViewAgenda style={fieldDesign}/>
-                <TextField type="string" label="image " variant="outlined" {...register("image",{required:true})}/><br/>
+                <TextField type="string" label="image " variant="outlined" {...register("image",{required:true})}/>
                 <ViewAgenda style={fieldDesign}/>
                 <TextField type="string" label="title " variant="outlined" {...register("title",{required:true})}/><br/>
+               category options:<br/>ELECTRICITY,FOOD,PETS,TOURISM,OUTDOOR,VACATION,PHOTO,RESTAURANTS <br/>
+
                 <Checkbox/>
                 <label>cancel</label>
                 <button>update</button>

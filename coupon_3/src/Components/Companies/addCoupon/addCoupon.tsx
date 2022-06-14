@@ -33,7 +33,8 @@ function AddCoupon(): JSX.Element {
              <form onSubmit={handleSubmit(send)}>
             <Typography variant="h4" className="HeadLine">add Coupon</Typography><hr/>
                 <ContactMail style={fieldDesign}/>
-                <TextField type="string"label="category" variant="outlined" {...register("category",{required:true})}/>
+                <TextField type="string"label="category" variant="outlined"  {...register("category",{required:true})} /><br/>
+                options:<br/>ELECTRICITY,FOOD,PETS,TOURISM,OUTDOOR,VACATION,PHOTO,RESTAURANTS
                 <div >{errors.category && "You must give coupon category"}</div>
                 <Password style={fieldDesign}/>
                 <TextField  type="string" label="description" variant="outlined" {...register("description",{required:true})}/>
@@ -57,7 +58,7 @@ function AddCoupon(): JSX.Element {
                 <ViewAgenda style={fieldDesign}/>
                 <TextField label="price" type="number" variant="outlined" {...register("price",{min:1,required:true})}/>
                 <br/>{errors.id && "You must give coupon price"}
-                <button>add</button><br/>
+                <button>add</button>
                         <Checkbox/>
                 <label>cancel</label>
                 </form>

@@ -20,7 +20,7 @@ import java.util.Set;
         property = "id",
        resolver = EntityIdResolver.class,
         scope = Company.class)
-
+@Table(name = "company")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,5 @@
 import {useForm,SubmitHandler} from "react-hook-form";
-import { Typography, TextField, Checkbox, ButtonGroup, Button, Select } from "@material-ui/core";
+import { Typography, TextField, Checkbox, ButtonGroup, Button, Select, InputLabel, NativeSelect } from "@material-ui/core";
 import { Password } from "@mui/icons-material";
 import { ContactMail, VerifiedUserOutlined, ViewAgenda } from "@material-ui/icons";
 import axios from "axios";
@@ -99,14 +99,9 @@ break;
                 <div >{errors.password && "You must give user password"}</div>
                 <br/><br/>
                 <VerifiedUserOutlined style={fieldDesign}/>
-                <select name= "select1">
-                   <option value= "">client Type</option>
-                   <option value= "1">admin </option>
-                   <option value= "2">customer  </option>
-                   <option value= "3">company </option>
-                </select>
               <TextField  label="clientType" variant="outlined" {...register("clientType",{required:true})}/>
-              <div >{errors.clientType && "You must give user clientType"}</div>
+    <div >{errors.clientType && "You must give user clientType"}</div>
+    options:admin,customer,company
                 <br/><br/>
                 <Checkbox/>
                 <label>Remmber me</label>

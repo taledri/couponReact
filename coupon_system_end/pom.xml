@@ -42,12 +42,19 @@
 			<version>0.11.2</version>
 			<scope>runtime</scope>
 		</dependency>
+		<!--		Remove MySQL Driver -->
+		<!--<dependency>-->
+		<!--	<groupId>mysql</groupId> -->
+		<!--	<artifactId>mysql-connector-java</artifactId> -->
+		<!--	<scope>runtime</scope> -->
+		<!--   </dependency> -->
 
+		<!-- PostgreSQL -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -83,6 +90,23 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>2.0.3</version>
+				<configuration>
+					<appName>couponsystem</appName>
+					<includeTarget>false</includeTarget>
+					<includes>
+						<include>${project.build.directory}/${project.build.finalName}.jar</include>
+					</includes>
+					<jdkVersion>${java.version}</jdkVersion>
+					<processTypes>
+						<web>java $JAVA_OPTS -jar
+							${project.build.directory}/${project.build.finalName}.jar</web>
+					</processTypes>
 				</configuration>
 			</plugin>
 		</plugins>

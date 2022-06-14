@@ -1,4 +1,4 @@
-import { Typography, TextField, ButtonGroup, Button } from "@material-ui/core";
+import { Typography, TextField, ButtonGroup, Button, MenuItem, Select } from "@material-ui/core";
 import { ViewAgenda } from "@mui/icons-material";
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
@@ -8,6 +8,7 @@ import Coupon from "../../model/coupon";
 import SingleCoupon from "../../model/singleCoupon";
 import globals from "../../Util/Globals";
 import notify from "../../Util/Notify";
+import enumCategory from "../enumCategory/enumCategory";
 
 interface formable{
     category:string;
@@ -15,6 +16,7 @@ interface formable{
 
 function GetCouponByCategory(): JSX.Element {
         const fieldDesign = {fontSize:40, margin:10};
+        const [category, setCategory] = useState<enumCategory>();
         const [cusCoup,setCusCoup] = useState<Coupon[]>([]);
         const {register,handleSubmit,formState:{errors}} = useForm<Coupon>();
         async function send(coupon:Coupon){
@@ -40,6 +42,7 @@ function GetCouponByCategory(): JSX.Element {
                 <ViewAgenda style={fieldDesign}/>
                 <TextField type="string" variant="outlined"label="chose category " {...register("category",{required:true})} />
                 <br/>{errors.category && "You must give  category"}
+            options:<br/>ELECTRICITY<br/>FOOD<br/>PETS<br/>TOURISM<br/>OUTDOOR<br/>VACATION<br/>PHOTORESTAURANTS <br/>
                 <button >get</button> 
                 </form>
                

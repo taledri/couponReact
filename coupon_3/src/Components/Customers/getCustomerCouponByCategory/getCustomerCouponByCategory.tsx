@@ -34,6 +34,8 @@ function GetCustomerCouponByCategory(): JSX.Element {
                 <ViewAgenda style={fieldDesign}/>
                <TextField type="string" variant="outlined"label="chose category " {...register("category",{required:true})}/>
                 <br/>{errors.category && "You must give coupon category"}
+                options:<br/>ELECTRICITY<br/>FOOD<br/>PETS<br/>TOURISM<br/>OUTDOOR<br/>VACATION<br/>PHOTORESTAURANTS <br/>
+
                 <br/><br/>
                 
                 <button >get</button> 

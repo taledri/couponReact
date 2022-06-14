@@ -13,6 +13,7 @@ import java.sql.Date;
 @Entity
 @Builder
 @Data
+@Table(name = "coupon")
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
